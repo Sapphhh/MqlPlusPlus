@@ -1,3 +1,4 @@
+                       
  
 # MQL++
 
@@ -14,20 +15,29 @@ Well, if it was a problem for someone, it is no longer.
 MQL++ allows the user fetch the data from the Metatrader5 terminal to work with it directly with it, aswell as to send orders to the trade server via C++ code.
 
 In simple terms, the MQL++ library calls the functions exposed by the Python API provided by MetaQuotes, which are just a bunch of C functions under the hood.
+ 
+# Quick Start Demo
 
-<!-- Add badges with link to Shields IO -->
+To run the sample project, you must have installed Visual Studio 2022 or later (it's not guaranteed that the project will run on older versions of MSVC) and build the solution 'MQL++'.
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/navendu-pottekkat/awesome-readme?include_prereleases)
-: Shows the current release version.
+The demo shows how to initialize the python and metatrader environments, aswell as how to fetch the rates of a certain timeframe in a 'date_from' to a 'date_to' date range, printing each bar data to the screen.
 
-![GitHub last commit](https://img.shields.io/github/last-commit/navendu-pottekkat/awesome-readme)
-: Shows the last commit time. Good indication of the project activity.
+At the same time, it provides an example of how to send market orders to the trade server.
+ 
+# Usage
+[(Back to top)](#table-of-contents)
 
-![GitHub issues](https://img.shields.io/github/issues-raw/navendu-pottekkat/awesome-readme)
-: Dynamic badge that shows the number of open issues in the project.
+```c
+void Fn()
+{
+ int i = 0;
+}
+```
 
-![GitHub pull requests](https://img.shields.io/github/issues-pr/navendu-pottekkat/awesome-readme)
-: Similar dynamic badge, but for pull requests.
+ 
+# License
+[(Back to top)](#table-of-contents)
 
-![GitHub](https://img.shields.io/github/license/navendu-pottekkat/awesome-readme)
-: Shows the open source license the project uses.
+[MIT license](./LICENSE)
+
+
