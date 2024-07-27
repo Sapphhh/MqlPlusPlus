@@ -208,7 +208,7 @@ The **MqlTradeRequest** must be filled as the [documentation](https://www.mql5.c
 Returns false in case of a failure. Check the **MqlTradeResult::retcode** member for more details about the failure.
 
 Whenever **MqlTradeRequest** and **MqlTradeResult** structures are not necessary anymore, you should call **Metatrader5::Release** to clean them up.
-The only exception is to calling **Release** on a **MqlTradeRequest** that has its string members (**symbol** and **comment**) set by a pointer that was not directly allocated by **new**. In this case, **Release** should not be called on **MqlTradeRequest**, as in the example below.
+The only exception is to calling **Release** on a **MqlTradeRequest** that has its **const char*** members (**symbol** and **comment**) set by a pointer that was not directly allocated by **new**. In this case, **Release** either should not be called on **MqlTradeRequest**, as in the example below, or should have its **const char*** members deallocated and set to nullptr beforehand.
 
 
 ```cpp
