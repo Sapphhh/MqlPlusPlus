@@ -222,7 +222,7 @@ void Buy(std::string symbol)
 
     req.action = TRADE_ACTION_DEAL;
     req.magic = 1337;
-    req.symbol = symbol.data(); // safe to use like this, as the 'symbol' object is never deleted
+    req.symbol = symbol.data(); // safe to use like this, as the 'symbol' object is only deleted at the end of the scope
     req.type = ORDER_TYPE_BUY;
     req.volume = 0.01;
     req.type_filling = ORDER_FILLING_IOC;
