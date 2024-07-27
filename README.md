@@ -24,8 +24,10 @@ The demo shows how to initialize the python and metatrader environments, aswell 
 
 At the same time, it provides an example of how to send market orders to the trade server.
  
-# Usage
+# Examples
 [(Back to top)](#table-of-contents)
+
+Every function exposed by the [(Python API provided by MetaQuotes)](https://www.mql5.com/en/docs/python_metatrader5) can be called from MQL++.
 
 ```cpp
 void Fn()
