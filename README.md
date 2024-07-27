@@ -46,6 +46,91 @@ int main(int argc, char** argv)
 }
 ```
 
+### Metatrader5::Init
+
+Estabilishes a connection with the open Metatrader5 terminal.
+In case of an error, the function returns 'false' and the **last_error** variable is set. If this occurs, a description of the error can be retrieved using the function LastError.
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+int main(int argc, char** argv)
+{
+    // Python environment already initialized...
+    if(Mt5::Init()==false)
+    {
+        MqlErrorInfo err;
+        Mt5::LastError(err);
+
+        std::cout << err.desc;
+        std::cin.get();
+        return 0;
+    }  
+}
+```
+
+### Metatrader5::Login
+
+Sends a login request to the terminal.
+In case of an error, the function returns 'false' and the **last_error** variable is set. If this occurs, a description of the error can be retrieved using the function LastError.
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+int main(int argc, char** argv)
+{
+    // Python environment already initialized...
+    // Connection to the terminal already estabilished
+
+    ulong login = 123456789;
+    std::string pwd = "MyPwd";
+    std::string sv_name = "MetaQuotes-Demo";
+    
+    if(Mt5::Login(login, pwd.c_str(), sv_name.c_str())==false)
+    {
+        std::cout << "Login failed.\n";
+        
+        MqlErrorInfo err;
+        Mt5::LastError(err);
+
+        std::cout << err.desc;
+
+        std::cin.get();
+        return 0;
+    }  
+}
+```
+
+### Metatrader5::LastError
+
+Gets the last error.
+If the program continues and the error was already handled, the user must call **Metatrader5::Release** on the MqlLastError object to clean it up.
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+int main(int argc, char** argv)
+{
+    // Python environment already initialized...
+    // Connection to the terminal already estabilished
+    
+    if(Mt5::Login(login, pwd.c_str(), sv_name.c_str())==false)
+    {
+        std::cout << "Login failed.\n";
+        
+        MqlErrorInfo err;
+        Mt5::LastError(err);
+
+        std::cout << err.desc;
+        Mt5::Release(err);
+    }
+    // do something after the error occurred, but does not end the program.
+}
+```
+
 ### Metatrader5::CopyRatesRange
 
 Copies the rates (bars) of a certain symbol in the specified timeframe from the range "date_from" to "date_to" and saves it in the **MqlRatesContainer** variable. Notice the use of string as date in the format "DD.MM.YYYY" or "DD.MM.YYYY HH:MM:SS", followed by the user-defined literal '_dt' to convert it to a **datetime** type. 
