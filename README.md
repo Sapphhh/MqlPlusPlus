@@ -27,7 +27,7 @@ At the same time, it provides an example of how to send market orders to the tra
 # Usage
 [(Back to top)](#table-of-contents)
 
-```c
+```cpp
 void Fn()
 {
  int i = 0;
