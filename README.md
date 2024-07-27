@@ -40,9 +40,9 @@ using Mt5 = Metatrader5;
 int main(int argc, char** argv)
 {
   if(Mt5::InitPyEnv() == false)
-{
-  return 0;
-}
+  {
+    return 0;
+  }
 }
 ```
 
