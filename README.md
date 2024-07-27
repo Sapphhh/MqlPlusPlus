@@ -138,6 +138,7 @@ Finally, the prints the **MqlRatesContainer** to the console.
 
 The data is copied from the oldest bar (index 0) to the newest bar (index 'size-1').
 
+After the container is not necessary anymore, call **Metatrader5::Release** to clean it up.
 ```cpp
 using Mt5 = Metatrader5;
 
@@ -151,6 +152,8 @@ void PrintRates(std::string symbol)
     {
         std::cout << rates[i] << '\n';
     }
+
+    Metatrader5::Release(rates);
 }
 ```
 
@@ -158,6 +161,7 @@ void PrintRates(std::string symbol)
 
 Similar to Metatrader5::CopyRatesRange, but copies the ticks in the range 'date_from' to 'date_to'.
 
+After the container is not necessary anymore, call **Metatrader5::Release** to clean it up.
 ```cpp
 using Mt5 = Metatrader5;
 
@@ -171,6 +175,8 @@ void PrintTicks(std::string symbol)
     {
         std::cout << ticks[i] << '\n';
     }
+
+    Metatrader5::Release(ticks);
 }
 ```
 
@@ -190,6 +196,40 @@ void PrintLastTick(std::string symbol)
     Mt5::SymbolInfoTick(symbol.c_str(), tick);
 
     std::cout << tick << "\n";
+}
+```
+
+### Metatrader5::OrderSend
+
+Sends an order request to the trade server. As a result, it returns a **MqlTradeResult** structure that contains the result of the trade order.
+Returns false in case of a failure. Check the **MqlTradeResult::retcode** member for more details about the failure.
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+void Buy(std::string symbol)
+{
+    MqlTradeRequest req{};
+    MqlTradeResult res{};
+
+    req.action = TRADE_ACTION_DEAL;
+    req.magic = 1337;
+    req.symbol = symbol.data(); // safe to use like this, as the 'symbol' object is never deleted
+    req.type = ORDER_TYPE_BUY;
+    req.volume = 0.01;
+    req.type_filling = ORDER_FILLING_IOC;
+
+    Mt5::OrderSend(req, res);
+
+    if(res.retcode == 10009)
+    {
+        std::cout << "Successful.\n";
+    }
+    else
+    {
+        std::cout << "Error: " << res.retcode << '\n';
+    }
 }
 ```
 
