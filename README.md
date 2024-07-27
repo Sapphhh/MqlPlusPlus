@@ -203,7 +203,7 @@ void PrintLastTick(std::string symbol)
 
 Sends an order request to the trade server. As a result, it returns a **MqlTradeResult** structure that contains the result of the trade order.
 
-The **MqlTradeRequest** must be filled as the [documentation][https://www.mql5.com/en/docs/constants/structures/mqltraderequest] shows.
+The **MqlTradeRequest** must be filled as the [documentation](https://www.mql5.com/en/docs/constants/structures/mqltraderequest) shows.
 
 Returns false in case of a failure. Check the **MqlTradeResult::retcode** member for more details about the failure.
 
