@@ -39,10 +39,10 @@ using Mt5 = Metatrader5;
 
 int main(int argc, char** argv)
 {
-  if(Mt5::InitPyEnv() == false)
-  {
-    return 0;
-  }
+    if(Mt5::InitPyEnv() == false)
+    {
+      return 0;
+    }
 }
 ```
 
@@ -58,7 +58,7 @@ using Mt5 = Metatrader5;
 
 void PrintRates(std::string symbol)
 {
- MqlRatesContainer rates;
+    MqlRatesContainer rates;
 
     long total = Mt5::CopyRatesRange(symbol.c_str(), TIMEFRAME_H1, "26.07.2023"_dt, "27.07.2024"_dt, rates);
 
@@ -78,7 +78,7 @@ using Mt5 = Metatrader5;
 
 void PrintTicks(std::string symbol)
 {
- MqlTickContainer ticks;
+    MqlTickContainer ticks;
 
     long total = Mt5::CopyTicksRange(symbol.c_str(), TIMEFRAME_H1, "26.07.2023"_dt, "27.07.2024"_dt, ticks);
 
