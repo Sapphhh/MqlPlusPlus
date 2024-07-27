@@ -204,6 +204,10 @@ void PrintLastTick(std::string symbol)
 Sends an order request to the trade server. As a result, it returns a **MqlTradeResult** structure that contains the result of the trade order.
 Returns false in case of a failure. Check the **MqlTradeResult::retcode** member for more details about the failure.
 
+Whenever **MqlTradeRequest** and **MqlTradeResult** structures are not necessary anymore, you should call **Metatrader5::Release** to clean them up.
+The only exception is to calling **Release** on a **MqlTradeRequest** that has its string members (**symbol** and **comment**) set by a pointer that was not directly allocated by **new**. In this case, **Release** should not be called on **MqlTradeRequest**, as in the example below.
+
+
 ```cpp
 
 using Mt5 = Metatrader5;
@@ -230,6 +234,9 @@ void Buy(std::string symbol)
     {
         std::cout << "Error: " << res.retcode << '\n';
     }
+
+    //Mt5::Release(req); // in this case, the 'comment' member was not set, and 'symbol' was a pointer already managed by the std::string. Release should not be called.
+    Mt5::Release(res);
 }
 ```
 
