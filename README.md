@@ -27,12 +27,21 @@ At the same time, it provides an example of how to send market orders to the tra
 # Examples
 [(Back to top)](#table-of-contents)
 
-Every function exposed by the [(Python API provided by MetaQuotes)](https://www.mql5.com/en/docs/python_metatrader5) can be called from MQL++.
+Almost every function exposed by the [Python API provided by MetaQuotes](https://www.mql5.com/en/docs/python_metatrader5) can be called from MQL++ using the same arguments (in the future, the remaining functions will be added). Here are examples on how to call some available functions and how to use their data:
+
+### Metatrader5::CopyRatesRange
 
 ```cpp
-void Fn()
+void PrintRates()
 {
- int i = 0;
+ MqlRatesContainer rates;
+
+    long total = Mt5::CopyRatesRange(symbol.c_str(), TIMEFRAME_H1, "26.07.2023"_dt, "27.07.2024"_dt, rates);
+
+    for (long i = 0; i < total; ++i)
+    {
+        std::cout << rates[i] << '\n';
+    }
 }
 ```
 
