@@ -25,11 +25,12 @@ The demo shows how to initialize the python and metatrader environments, aswell 
 At the same time, it provides an example of how to send market orders to the trade server.
  
 # Examples
-[(Back to top)](#table-of-contents)
 
 Almost every function exposed by the [Python API provided by MetaQuotes](https://www.mql5.com/en/docs/python_metatrader5) can be called from MQL++ using the same arguments (in the future, the remaining functions will be added). Here are examples on how to call some available functions and how to use their data:
 
 ### Metatrader5::CopyRatesRange
+
+Copies the rates (bars) of a certain symbol in the specified timeframe from the range "date_from" to "date_to" and saves it in the **MqlRatesContainer** variable. Notice the use of string as date in the format "DD.MM.YYYY" or "DD.MM.YYYY HH:MM:SS", followed by the user-defined literal '_dt' to convert it to a **datetime** type. 
 
 ```cpp
 void PrintRates()
@@ -47,7 +48,6 @@ void PrintRates()
 
  
 # License
-[(Back to top)](#table-of-contents)
 
 [MIT license](./LICENSE)
 
