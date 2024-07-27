@@ -28,12 +28,35 @@ At the same time, it provides an example of how to send market orders to the tra
 
 Almost every function exposed by the [Python API provided by MetaQuotes](https://www.mql5.com/en/docs/python_metatrader5) can be called from MQL++ using the same arguments (in the future, the remaining functions will be added). Here are examples on how to call some available functions and how to use their data:
 
+### Metatrader5::InitPyEnv
+
+Initializes the python environment. Must be called before any other function.
+Errors are immediately printed to the console. **This behavior is subject to change in future versions.**
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+int main(int argc, char** argv)
+{
+  if(Mt5::InitPyEnv() == false)
+{
+  return 0;
+}
+}
+```
+
 ### Metatrader5::CopyRatesRange
 
 Copies the rates (bars) of a certain symbol in the specified timeframe from the range "date_from" to "date_to" and saves it in the **MqlRatesContainer** variable. Notice the use of string as date in the format "DD.MM.YYYY" or "DD.MM.YYYY HH:MM:SS", followed by the user-defined literal '_dt' to convert it to a **datetime** type. 
+Finally, the prints the **MqlRatesContainer** to the console.
+
+The data is copied from the oldest bar (index 0) to the newest bar (index 'size-1').
 
 ```cpp
-void PrintRates()
+using Mt5 = Metatrader5;
+
+void PrintRates(std::string symbol)
 {
  MqlRatesContainer rates;
 
@@ -43,6 +66,45 @@ void PrintRates()
     {
         std::cout << rates[i] << '\n';
     }
+}
+```
+
+### Metatrader5::CopyTicksRange
+
+Similar to Metatrader5::CopyRatesRange, but copies the ticks in the range 'date_from' to 'date_to'.
+
+```cpp
+using Mt5 = Metatrader5;
+
+void PrintTicks(std::string symbol)
+{
+ MqlTickContainer ticks;
+
+    long total = Mt5::CopyTicksRange(symbol.c_str(), TIMEFRAME_H1, "26.07.2023"_dt, "27.07.2024"_dt, ticks);
+
+    for (long i = 0; i < total; ++i)
+    {
+        std::cout << ticks[i] << '\n';
+    }
+}
+```
+
+### Metatrader5::SymbolInfoTick
+
+Copies the last tick data received by the Metatrader5 terminal.
+Returns false in case of an error, which is either directly printed to the console (in the case of a Python error) or stored in the last_error variable.
+
+```cpp
+
+using Mt5 = Metatrader5;
+
+void PrintLastTick(std::string symbol)
+{
+    MqlTick tick;
+
+    Mt5::SymbolInfoTick(symbol.c_str(), tick);
+
+    std::cout << tick << "\n";
 }
 ```
 
