@@ -29,6 +29,7 @@ Errors are immediately printed to the console. **This behavior is subject to cha
 
 ```cpp
 
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv)
@@ -47,6 +48,7 @@ In case of an error, the function returns 'false' and the **last_error** variabl
 
 ```cpp
 
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv)
@@ -71,6 +73,7 @@ In case of an error, the function returns 'false' and the **last_error** variabl
 
 ```cpp
 
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv)
@@ -104,6 +107,7 @@ If the program continues and the error was already handled, the user must call *
 
 ```cpp
 
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv)
@@ -134,6 +138,7 @@ The data is copied from the oldest bar (index 0) to the newest bar (index 'size-
 
 After the container is not necessary anymore, call **MQL5::Metatrader5::Release** to clean it up.
 ```cpp
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 void PrintRates(std::string symbol)
@@ -157,6 +162,7 @@ Similar to MQL5::Metatrader5::CopyRatesRange, but copies the ticks in the range 
 
 After the container is not necessary anymore, call **MQL5::Metatrader5::Release** to clean it up.
 ```cpp
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 void PrintTicks(std::string symbol)
@@ -180,7 +186,7 @@ Copies the last tick data received by the MQL5::Metatrader5 terminal.
 Returns false in case of an error, which is either directly printed to the console (in the case of a Python error) or stored in the last_error variable.
 
 ```cpp
-
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 void PrintLastTick(std::string symbol)
@@ -206,7 +212,7 @@ The only exception is to calling **Release** on a **MqlTradeRequest** that has i
 
 
 ```cpp
-
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 void Buy(std::string symbol)
@@ -244,7 +250,7 @@ The user can specify **0** for the **date_from** parameter and **MAX_DATETIME** 
 Returns -1 in case of an error.
 
 ```cpp
-
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv[])
@@ -271,6 +277,7 @@ Gets all open positions and stores the value in a **MqlPositionInfoContainer**.
 Returns the number of open positions on success and -1 in case of an error.
 
 ```cpp
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv[])
@@ -297,6 +304,7 @@ Gets all open positions and stores the value in a **MqlOrderInfoContainer**.
 Returns the number of open positions on success and -1 in case of an error.
 
 ```cpp
+using namespace MQL5;
 using Mt5 = MQL5::Metatrader5;
 
 int main(int argc, char** argv[])
