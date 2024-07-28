@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 }
 ```
 
-### MQL5::Metatrader5::LastError
+### MQL5::Metatrader5::GetLastError
 
 Gets the last error.
 If the program continues and the error was already handled, the user must call **MQL5::Metatrader5::Release** on the MqlLastError object to clean it up.
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
         std::cout << "Login failed.\n";
         
         MqlErrorInfo err;
-        Mt5::LastError(err);
+        Mt5::GetLastError(err);
 
         std::cout << err.desc;
         Mt5::Release(err);
@@ -240,6 +240,35 @@ void Buy(std::string symbol)
 
     //Mt5::Release(req); // in this case, the 'comment' member was not set, and 'symbol' was a pointer already managed by the std::string. Release should not be called.
     Mt5::Release(res);
+}
+```
+
+### MQL5::Metatrader5::HistoryDealsGet
+Gets all deals in a certain date range and returns it in a **MqlDealInfoContainer**.
+The user can specify **0** for the **date_from** parameter and **MAX_DATETIME** for the **date_to** parameter to retrieve the entire deals list.
+
+Returns -1 in case of an error.
+
+```cpp
+
+using Mt5 = MQL5::Metatrader5;
+
+int main(int argc, char** argv[])
+{
+    // initialization functions...
+
+    MqlDealInfoContainer deals;
+    if (Mt5::HistoryDealsGet(0, MAX_DATETIME, deals) <= 0)
+    {
+        MqlErrorInfo err;
+        Mt5::GetLastError(err);
+
+        std::cout << err << '\n';
+
+        return 0;
+    }
+
+    std::cout << deals[deals.Size()-1] << '\n';
 }
 ```
 
