@@ -1,10 +1,3 @@
-
-                       ##### Table of Contents  
-[Headers](#headers)  
-[Emphasis](#emphasis)  
-...snip...    
-<a name="headers"/>
-## Headers
  
 # MQL++
 
@@ -15,6 +8,13 @@ Well, if it was a problem for someone, it is no longer.
 MQL++ allows the user fetch the data from the MQL5::Metatrader5 terminal to work with it directly with it, aswell as to send orders to the trade server via C++ code.
 
 In simple terms, the MQL++ library calls the functions exposed by the Python API provided by MetaQuotes, which are just a bunch of C functions under the hood.
+
+##### Table of Contents  
+[Headers](#QuickStart)  
+[Emphasis](#emphasis)  
+...snip...    
+<a name="headers"/>
+## Headers
  
 # Quick Start
 
