@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "Metatrader5.h"
 #include "Python.h"
 #include "inttypes.h"
@@ -3578,9 +3580,6 @@ uint64_t MQL5::Utils::CStrToDatetime(const char* chr)
 {
 	std::string_view sv(chr);
 
-	static std::tm epoch{.tm_sec = 0, .tm_min = 0, .tm_hour = 0, .tm_mday = 1, .tm_mon = 0, .tm_year = 1970 - 1900};
-	static std::time_t epoch_time = std::mktime(&epoch);
-
 	std::tm now{};
 
 	if (sv.size() == 10)
@@ -3605,7 +3604,17 @@ uint64_t MQL5::Utils::CStrToDatetime(const char* chr)
 
 	std::time_t now_time = std::mktime(&now);
 
-	return now_time - epoch_time;
+	return now_time - mql_epoch_time;
+}
+
+datetime MQL5::Utils::GetCurrentTime()
+{
+	static const auto p0 = std::chrono::system_clock::from_time_t(mql_epoch_time);
+	const auto p1 = std::chrono::system_clock::now();
+
+	const auto p2 = p1 - p0;
+
+	return (datetime)std::chrono::duration_cast<std::chrono::seconds>(p2).count();
 }
 
 PyObject* MQL5::Utils::GetAttr(PyObject* mod, const std::string& fn_name)

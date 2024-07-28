@@ -6,9 +6,8 @@
 #include "Python.h"
 #include "numpy/arrayobject.h"
 
-#pragma pack(8)
+#pragma pack(1)
 
-#define MtChar MtString::value_type
 #define MINUTE 60
 #define HOUR (MINUTE*60)
 #define DAY (HOUR*24)
@@ -31,12 +30,12 @@
 
 static inline std::pair<PyObject*, PyCFunctionWithKeywords> PY_FUNC_TABLE[64];
 
+static std::tm mql_epoch_struct{.tm_sec = 0, .tm_min = 0, .tm_hour = 0, .tm_mday = 1, .tm_mon = 0, .tm_year = 1970 - 1900};
+static std::time_t mql_epoch_time = std::mktime(&mql_epoch_struct);
+
 static uint64_t operator"" _dt(const char* chr, std::size_t sz)
 {
 	std::string_view sv(chr);
-
-	static std::tm epoch{.tm_sec = 0, .tm_min = 0, .tm_hour = 0, .tm_mday = 1, .tm_mon = 0, .tm_year = 1970 - 1900};
-	static std::time_t epoch_time = std::mktime(&epoch);
 
 	std::tm now{};
 
@@ -62,7 +61,7 @@ static uint64_t operator"" _dt(const char* chr, std::size_t sz)
 
 	std::time_t now_time = std::mktime(&now);
 
-	return (uint64_t)(now_time - epoch_time);
+	return (uint64_t)(now_time - mql_epoch_time);
 }
 static std::string operator"" _dt(uint64_t time)
 {
@@ -93,6 +92,7 @@ namespace MQL5
 		/*Time related functions*/
 		EXPORT_API std::string TimeToString(uint64_t time);
 		EXPORT_API uint64_t CStrToDatetime(const char* chr);
+		EXPORT_API datetime GetCurrentTime();
 
 		/*Python related functions*/
 		PyObject* GetAttr(PyObject* mod, const std::string& fn_name);
@@ -101,7 +101,6 @@ namespace MQL5
 		/*Memory related functions*/
 		void ZeroMemory(void* ptr, size_t size);
 
-		
 	};
 
 	struct MqlObject
