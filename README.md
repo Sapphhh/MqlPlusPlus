@@ -22,6 +22,10 @@ In simple terms, the MQL++ library calls the functions exposed by the Python API
 # Quick Start
 
 To use the library, all you need to do is copy the **Metatrader5** folder to your project/includes folder, include the **Metatrader5.h** and you're ready to go. 
+
+If you want to use the library on an application written in another language, just compile the library as a dll or download the latest release and import its function on your project.
+
+You'll find a single file example in the **MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
  
 # Examples
 
