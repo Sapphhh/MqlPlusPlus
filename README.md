@@ -10,9 +10,10 @@ MQL++ allows the user fetch the data from the MQL5::Metatrader5 terminal to work
 In simple terms, the MQL++ library calls the functions exposed by the Python API provided by MetaQuotes, which are just a bunch of C functions under the hood.
 
 ##### Table of Contents  
-[Headers](#QuickStart)  
-[Emphasis](#emphasis)  
-...snip...    
+[Quick Start](#quick-start)  
+[Examples](#examples)  
+[More to come](#more-to-come)
+[Support this project](#support-this-project)
 <a name="headers"/>
 ## Headers
  
