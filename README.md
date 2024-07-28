@@ -266,6 +266,57 @@ int main(int argc, char** argv[])
 }
 ```
 
+### MQL5::Metatrader5::PositionsGet
+Gets all open positions and stores the value in a **MqlPositionInfoContainer**.
+Returns the number of open positions on success and -1 in case of an error.
+
+```cpp
+using Mt5 = MQL5::Metatrader5;
+
+int main(int argc, char** argv[])
+{
+    // initialization functions...
+
+    MqlPositionInfoContainer positions;
+    if (Mt5::PositionsGet(positions) <= 0)
+    {
+        MqlErrorInfo err;
+        Mt5::GetLastError(err);
+
+        std::cout << err << '\n';
+
+        return 0;
+    }
+
+    std::cout << positions[positions.Size()-1] << '\n';
+}
+```
+
+### MQL5::Metatrader5::OrdersGet
+Gets all open positions and stores the value in a **MqlOrderInfoContainer**.
+Returns the number of open positions on success and -1 in case of an error.
+
+```cpp
+using Mt5 = MQL5::Metatrader5;
+
+int main(int argc, char** argv[])
+{
+    // initialization functions...
+
+    MqlOrderInfoContainer orders;
+    if (Mt5::OrdersGet(orders) <= 0)
+    {
+        MqlErrorInfo err;
+        Mt5::GetLastError(err);
+
+        std::cout << err << '\n';
+
+        return 0;
+    }
+
+    std::cout << orders[orders.Size()-1] << '\n';
+}
+```
  
 # License
 
