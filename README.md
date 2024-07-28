@@ -18,13 +18,6 @@ In simple terms, the MQL++ library calls the functions exposed by the Python API
 [3. More to come](#more-to-come)
 
 [4. Support this project](#support-this-project)
-
-##### Table of Contents  
-[Headers](#headers)  
-[Emphasis](#emphasis)  
-...snip...    
-<a name="headers"/>
-## Headers
  
 # Quick Start
 
