@@ -325,7 +325,7 @@ int main(int argc, char** argv[])
 # More to come
 
 MQL5 is a rich and complete language to develop financial analysis and trading tools.
-The goal of MQL++ is to come as close as possible to MQL5 in terms of how to interact with Metatrader5 terminal, aswell as to become a complete library to analyze data and develop trading strategies.
+The goal of MQL++ is to come as close as possible to the MetaQuotes language in terms of how to interact with Metatrader5 terminal, aswell as to become a complete library to analyze data and develop trading strategies.
 
 # Support this project
 
