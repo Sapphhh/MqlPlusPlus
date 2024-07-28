@@ -31,11 +31,61 @@
 
 static inline std::pair<PyObject*, PyCFunctionWithKeywords> PY_FUNC_TABLE[64];
 
-//class Metatrader5;
+static uint64_t operator"" _dt(const char* chr, std::size_t sz)
+{
+	std::string_view sv(chr);
+
+	static std::tm epoch{.tm_sec = 0, .tm_min = 0, .tm_hour = 0, .tm_mday = 1, .tm_mon = 0, .tm_year = 1970 - 1900};
+	static std::time_t epoch_time = std::mktime(&epoch);
+
+	std::tm now{};
+
+	if (sv.size() == 10)
+	{
+		sscanf_s(chr, "%d.%d.%d", &now.tm_mday, &now.tm_mon, &now.tm_year);
+	}
+	else if (sv.size() == 16)
+	{
+		sscanf_s(chr, "%d.%d.%d %d:%d", &now.tm_mday, &now.tm_mon, &now.tm_year, &now.tm_hour, &now.tm_min);
+	}
+	else if (sv.size() == 19)
+	{
+		sscanf_s(chr, "%d.%d.%d %d:%d:%d", &now.tm_mday, &now.tm_mon, &now.tm_year, &now.tm_hour, &now.tm_min, &now.tm_sec);
+	}
+	else
+	{
+		throw "Invalid datetime format.";
+		return 0;
+	}
+	now.tm_year -= 1900;
+	now.tm_mon -= 1;
+
+	std::time_t now_time = std::mktime(&now);
+
+	return (uint64_t)(now_time - epoch_time);
+}
+static std::string operator"" _dt(uint64_t time)
+{
+	char buffer[64];
+
+	std::time_t conv_time = time;
+
+	std::tm conv{};
+	gmtime_s(&conv, &conv_time);
+
+	std::strftime(buffer, 64, "%d.%m.%Y %H:%M:%S", &conv);
+
+	return std::string(buffer);
+}
 
 namespace MQL5
 {
 	class Metatrader5;
+
+	using uchar = uint8_t;
+	using ulong = uint64_t;
+	using uint = uint32_t;
+	using datetime = uint64_t;
 
 	/*Misc functions*/
 	namespace Utils
@@ -50,12 +100,9 @@ namespace MQL5
 
 		/*Memory related functions*/
 		void ZeroMemory(void* ptr, size_t size);
-	};
 
-	using uchar = uint8_t;
-	using ulong = uint64_t;
-	using uint = uint32_t;
-	using datetime = uint64_t;
+		
+	};
 
 	struct MqlObject
 	{
