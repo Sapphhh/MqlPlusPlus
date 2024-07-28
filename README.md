@@ -322,7 +322,15 @@ int main(int argc, char** argv[])
 }
 ```
 
-###
+### More to come
+
+MQL5 is a rich and complete language to develop financial analysis and trading tools.
+The goal of MQL++ is to come as close as possible to MQL5 in terms of how to interact with Metatrader5 terminal, aswell as to become a complete library to analyze data and develop trading strategies.
+
+### Support this project
+
+If you're willing to contribute to this project, please get in touch with me.
+If you want to support its development, please check out my Expert Advisor [Emerald EA Builder](https://www.mql5.com/en/market/product/118373), available in the MetaQuotes market.
  
 ### License
 
