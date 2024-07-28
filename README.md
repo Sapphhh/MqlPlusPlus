@@ -10,13 +10,9 @@ MQL++ allows the user fetch the data from the MQL5::Metatrader5 terminal to work
 
 In simple terms, the MQL++ library calls the functions exposed by the Python API provided by MetaQuotes, which are just a bunch of C functions under the hood.
  
-# Quick Start Demo
+# Quick Start
 
-To run the sample project, you must have installed Visual Studio 2022 or later (it's not guaranteed that the project will run on older versions of MSVC) and build the solution 'MQL++'.
-
-The demo shows how to initialize the python and metatrader environments, aswell as how to fetch the rates of a certain timeframe in a 'date_from' to a 'date_to' date range, printing each bar data to the screen.
-
-At the same time, it provides an example of how to send market orders to the trade server.
+To use the library, all you need to do is copy the **Metatrader5** folder to your project/includes folder, include the **Metatrader5.h** and you're ready to go. 
  
 # Examples
 
@@ -325,8 +321,10 @@ int main(int argc, char** argv[])
     std::cout << orders[orders.Size()-1] << '\n';
 }
 ```
+
+###
  
-# License
+### License
 
 [MIT license](./LICENSE)
 
