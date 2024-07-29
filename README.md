@@ -26,7 +26,7 @@ Follow these steps to correctly use the library:
 + 1. Install a Python version (I would recommend the version 3.10 or later);
   2. Run the CMD as admin and run the following command to install the Metatrader5 module: **pip install Metatrader5**;
      2.1. Although the **Metatrader5** module already uses it, you may have to install a **numpy** version compatible to it. If any error occurs, you may have to also run the command **pip install "numpy<2.0"** to install the numpy module. 
-  3. Create a new project and add the **Metatrader5** folder, which contains the lib, to your project folder.
+  3. Create a new project and add the **Metatrader5** folder, which contains the lib, to your project folder. Also, set it to compile with C++20 **(/std:c++20)**
   4. Add the Python **include** and **lib** and also the **numpy include** directories to your project, so it can look for the required libraries.
      4.1. If you used the default installation path for Python, both are probably the following locations:
      - C:\Python310\include
