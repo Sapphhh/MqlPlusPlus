@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     if(Mt5::Init()==false)
     {
         MqlErrorInfo err;
-        Mt5::LastError(err);
+        Mt5::GetLastError(err);
 
         std::cout << err.desc;
         std::cin.get();
@@ -111,7 +111,7 @@ int main(int argc, char** argv)
         std::cout << "Login failed.\n";
         
         MqlErrorInfo err;
-        Mt5::LastError(err);
+        Mt5::GetLastError(err);
 
         std::cout << err.desc;
 
