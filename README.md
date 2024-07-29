@@ -35,9 +35,8 @@ Follow these steps to correctly use the library:
     
   5. After that, you should be ready to start coding with MQL++.
      
-If you want to use the library on an application written in another language, just compile the library as a dll or download the latest release and import its function on your project.
-
-You'll find a single file example in the **MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
++ If you want to use the library on an application written in another language, just compile the library as a dll or download the latest release and import its function on your project.
+  You'll find a single file example in the **MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
  
 # Examples
 
