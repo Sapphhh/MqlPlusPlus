@@ -1316,7 +1316,7 @@ long MQL5::Metatrader5::CopyRatesFrom(const char* symbol, ENUM_TIMEFRAMES timefr
 	}
 	
 	rates.mql_object.object = py_ret_value;
-	rates.mql_object.elem_count = PyArray_SIZE(py_ret_value);
+	rates.mql_object.elem_count = (long)PyArray_SIZE(py_ret_value);
 
 	rates.mql_rates = (MqlRates*)PyArray_BYTES(rates.mql_object.object);
 	Py_DECREF(py_args);
@@ -2127,7 +2127,7 @@ long MQL5::Metatrader5::OrdersGetTickets(const char* symbol, ulong*& orders)
 	Py_DECREF(py_kwargs);
 	Py_DECREF(py_ret_value);
 
-	return orders_count;
+	return (long)orders_count;
 }
 
 long MQL5::Metatrader5::OrdersGetTickets(ulong*& orders)
@@ -2179,7 +2179,7 @@ long MQL5::Metatrader5::OrdersGetTickets(ulong*& orders)
 	Py_DECREF(py_args);
 	Py_DECREF(py_ret_value);
 
-	return orders_count;
+	return (long)orders_count;
 }
 
 long MQL5::Metatrader5::PositionsTotal()
