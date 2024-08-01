@@ -969,7 +969,7 @@ namespace MQL5
 	"Incorrect of prohibited 'order_type'."
 	"Position with the specified 'POSITION_IDENTIFIER' has already been closed.",
 	"A close volume exceeds the current position volume.",
-	"A close order already exists for a specified position. This This may happen when working in the hedging system: •when attempting to close a position with an opposite one, while close orders for the position already exist or •when attempting to fully or partially close a position if the total volume of the already present close orders and the newly placed one exceeds the current position volume.",
+	"A close order already exists for a specified position. This This may happen when working in the hedging system: Â•when attempting to close a position with an opposite one, while close orders for the position already exist or Â•when attempting to fully or partially close a position if the total volume of the already present close orders and the newly placed one exceeds the current position volume.",
 	"The number of open positions simultaneously present on an account can be limited by the server settings. After a limit is reached, the server returns the TRADE_RETCODE_LIMIT_POSITIONS (10040) error when attempting to place an order. The limitation operates differently depending on the position accounting type.",
 	"The pending order activation request is rejected, the order is canceled.",
 	"The request is rejected, because the 'Only long positions are allowed' rule is set for the symbol (POSITION_TYPE_BUY).",
