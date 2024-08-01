@@ -948,67 +948,57 @@ namespace Metatrader5
 
     public partial class Methods
     {
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?InitPyEnv@Metatrader5@MQL5@@SA_NXZ")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?InitPyEnv@Metatrader5@MQL5@@SA_NXZ")]
         public static extern bool InitPyEnv();
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Init@Metatrader5@MQL5@@SA_NXZ")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Init@Metatrader5@MQL5@@SA_NXZ")]
         public static extern bool Init();
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Login@Metatrader5@MQL5@@SA_N_KPEBD10@Z")]
-        public static extern bool Login(UInt64 login, string password, string server_name, UInt64 timeout = 5000);
+        [DllImport(@"path/to/dll/MQL++.dll", CharSet = CharSet.Ansi, EntryPoint = "?Login@Metatrader5@MQL5@@SA_N_KPEBD10@Z")]
+        public static extern bool Login(UInt64 login, string password, string server_name, UInt64 timeout=5000, bool portable=false);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?SymbolsTotal@Metatrader5@MQL5@@SAJXZ")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolsTotal@Metatrader5@MQL5@@SAJXZ")]
         public static extern long SymbolsTotal();
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?SymbolData@Metatrader5@MQL5@@SA_NPEBDAEAUMqlObject@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolInfo@Metatrader5@MQL5@@SA_NPEBDAEAUMqlSymbolInfo@2@@Z")]
         public static extern bool SymbolInfo(string symbol, ref MqlSymbolInfo symbol_info);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyTicksFrom@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolInfoTick@Metatrader5@MQL5@@SA_NPEBDAEAUMqlTick@2@@Z")]
+        public static extern bool SymbolInfoTick(string symbol, ref MqlTick symbol_info);
+
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyTicksFrom@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
         public static extern long CopyTicksFrom(string symbol, ulong date_from, ulong count, ENUM_TICK_FLAG flags, ref MqlTickContainer buffer);
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyTicksRange@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
+        public static extern long CopyTicksRange(string symbol, ulong date_from, ulong date_to, ENUM_TICK_FLAG flags, ref MqlRatesContainer buffer);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyTicksRange@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
-        public static extern long CopyTicksRange(string symbol, ulong date_from, ulong date_to, ENUM_TICK_FLAG flags, ref MqlTickContainer buffer);
-
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyRatesFrom@Metatrader5@MQL5@@SAJPEBDW4ENUM_TIMEFRAMES@2@_K2AEAUMqlObject@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyRatesFrom@Metatrader5@MQL5@@SAJPEBDW4ENUM_TIMEFRAMES@2@_K2AEAUMqlRatesContainer@2@@Z")]
         public static extern long CopyRatesFrom(string symbol, ENUM_TIMEFRAMES timeframe, UInt64 date_from, ulong count, ref MqlRatesContainer buffer);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?CStrToDatetime@Utils@MQL5@@YA_KPEBD@Z")]
-        public static extern UInt64 CStrToDatetime(string date);
-
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlObject@2@@Z")]
-        public static extern void Release(ref MqlObject obj);
-
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlErrorInfo@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlErrorInfo@2@@Z")]
         public static extern void Release(ref MqlErrorInfo error_info);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlVersionInfo@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlVersionInfo@2@@Z")]
         public static extern void Release(ref MqlVersionInfo version_info);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlAccountInfo@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlAccountInfo@2@@Z")]
         public static extern void Release(ref MqlAccountInfo account_info);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlSymbolInfo@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlSymbolInfo@2@@Z")]
         public static extern void Release(ref MqlSymbolInfo symbol_info);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTick@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTick@2@@Z")]
         public static extern void Release(ref MqlTick tick);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlRates@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlRates@2@@Z")]
         public static extern void Release(ref MqlRates tick);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTradeRequest@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTradeRequest@2@@Z")]
         public static extern void Release(ref MqlTradeRequest request);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTradeResult@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTradeResult@2@@Z")]
         public static extern void Release(ref MqlTradeResult result);
 
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTickContainer@2@@Z")]
-        public static extern void Release(ref MqlTickContainer request);
-
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlRatesContainer@2@@Z")]
-        public static extern void Release(ref MqlRatesContainer result);
-
-        [DllImport(@"D:\Prj\SimplePy\x64\Release-DLL\MQL++.dll", EntryPoint = "?OrderSend@Metatrader5@MQL5@@SA_NAEBUMqlTradeRequest@2@AEAUMqlTradeResult@2@@Z")]
+        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?OrdersTotal@Metatrader5@MQL5@@SAJXZ")]
         public static extern bool OrderSend(ref MqlTradeRequest request, ref MqlTradeResult result);
     }
 }
