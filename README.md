@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
 Estabilishes a connection with the open MQL5::Metatrader5 terminal.
 In case of an error, the function returns 'false' and the **last_error** variable is set. If this occurs, a description of the error can be retrieved using the function LastError.
-
+If you close the terminal, you need to call **Init** again once it is reopened.
 ```cpp
 
 using namespace MQL5;
