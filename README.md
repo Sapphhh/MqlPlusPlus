@@ -159,7 +159,8 @@ int main(int argc, char** argv)
 Copies the rates (bars) of a certain symbol in the specified timeframe from the range "date_from" to "date_to" and saves it in the **MqlRatesContainer** variable. Notice the use of string as date in the format "DD.MM.YYYY" or "DD.MM.YYYY HH:MM:SS", followed by the user-defined literal '_dt' to convert it to a **datetime** type. 
 Finally, the prints the **MqlRatesContainer** to the console.
 
-The data is copied from the oldest bar (index 0) to the newest bar (index 'size-1').
+The data is placed in the container from the oldest bar (index 0) to the newest bar (index 'size-1').
+**date_from** may be 0 to copy the data from the first bar; **date_to** can be MAX_DATETIME to copy all bars up to the newest one.
 
 After the container is not necessary anymore, call **MQL5::Metatrader5::Release** to clean it up.
 ```cpp
@@ -184,6 +185,34 @@ void PrintRates(std::string symbol)
 ### MQL5::Metatrader5::CopyTicksRange
 
 Similar to MQL5::Metatrader5::CopyRatesRange, but copies the ticks in the range 'date_from' to 'date_to'.
+
+After the container is not necessary anymore, call **MQL5::Metatrader5::Release** to clean it up.
+```cpp
+using namespace MQL5;
+using Mt5 = MQL5::Metatrader5;
+
+void PrintTicks(std::string symbol)
+{
+    MqlTickContainer ticks;
+
+    long total = Mt5::CopyTicksRange(symbol.c_str(), TIMEFRAME_H1, "26.07.2023"_dt, "27.07.2024"_dt, ticks);
+
+    for (long i = 0; i < total; ++i)
+    {
+        std::cout << ticks[i] << '\n';
+    }
+
+    MQL5::Metatrader5::Release(ticks);
+}
+```
+
+### MQL5::Metatrader5::CopyTicksFrom
+
+Copies **'count'** ticks to the past, starting from the **'date_from'** date.
+The data is arranged in the destination container from the oldest tick (index 0) to the newewst tick (index **'size-1'**).
+
+Although not documented by the MQL docs, the **date_from** parameter **must be lower or equal** than the last received **tick** time; otherwise, no error returns after calling **GetLastError**, but no data is copied. The last tick information can be retrieved by calling **MQL5::Metatrader5::SymbolInfoTick**.
+
 
 After the container is not necessary anymore, call **MQL5::Metatrader5::Release** to clean it up.
 ```cpp
