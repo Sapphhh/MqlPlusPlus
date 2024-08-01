@@ -37,9 +37,11 @@ Follow these steps to correctly use the library:
   6. When your program is ready, before you run it, you **must** open the Metatrader 5 terminal (otherwise the **Init** function will fail) and login to any account (otherwise the **Login** function will fail). After you call **Login** in your code, it'll automatically switch to that account in the terminal. 
      
 + If you want to use the library on an application written in another language, just compile the library as a dll or download the latest release and import its function on your project.
-  You'll find a single file example in the **MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
+  You'll find a single file example in the **Examples/MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
  
 # Examples
+
+In the **Examples/*** folder there'll be some examples on how to use the classes for more convenience when trading. You still can use the functions directly, though.
 
 Almost every function exposed by the [Python API provided by MetaQuotes](https://www.mql5.com/en/docs/python_MQL5::Metatrader5) can be called from MQL++ using the same arguments (in the future, the remaining functions will be added). Here are examples on how to call some available functions and how to use their data:
 
