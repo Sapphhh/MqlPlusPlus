@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 {
     if(Mt5::InitPyEnv() == false)
     {
-      return 0;
+      return 0; // if this function fails, calling GetLastError won't help. Instead, the error is directly printed to the console - although errors are really rare.
     }
 }
 ```
