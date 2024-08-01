@@ -29,13 +29,14 @@ Follow these steps to correctly use the library:
      2.1. Although the **Metatrader5** module already uses it, you may have to install a **numpy** version compatible to it. If any error occurs, you may have to also run the command **pip install "numpy<2.0"** to install the numpy module. 
   4. Create a new project and add the **Metatrader5** folder, which contains the lib, to your project folder. Also, set it to compile with C++20 **(/std:c++20)**
   5. Add the Python **include** and **lib** and also the **numpy include** directories to your project, so it can look for the required libraries.
+
      4.1. If you used the default installation path for Python, both are probably the following locations:
      - C:\Python310\include
      - C:\Python310\libs
      - C:\Python310\Lib\site-packages\numpy\core\include
     
-  6. After that, you should be ready to start coding with MQL++.
-  7. When your program is ready, before you run it, you **must** open the Metatrader 5 terminal (otherwise the **Init** function will fail) and login to any account (otherwise the **Login** function will fail). After you call **Login** in your code, it'll automatically switch to that account in the terminal. 
+  7. After that, you should be ready to start coding with MQL++.
+  8. When your program is ready, before you run it, you **must** open the Metatrader 5 terminal (otherwise the **Init** function will fail) and login to any account (otherwise the **Login** function will fail). After you call **Login** in your code, it'll automatically switch to that account in the terminal. 
      
 + If you want to use the library on an application written in another language, just compile the library as a dll or download the latest release and import its function on your project.
   You'll find a single file example in the **Examples/MQL++_4CSharp** folder on how to declare MQL++ structures in C# and how to import its functions from the compiled DLL. 
