@@ -1,16 +1,124 @@
-﻿using System.Runtime.InteropServices;
-using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Runtime;
+using System.Runtime.InteropServices;
 
-namespace Metatrader5
+
+namespace MQL
 {
+    using datetime = UInt64;
+
+    unsafe public class MqlString
+    {
+        /*private sbyte* mStringBytes = null;
+        private UInt64 mStringLen = 0;
+
+        private MqlString()
+        {
+
+        }
+
+        public MqlString(sbyte* chars)
+        {
+            mStringBytes = chars;
+            mStringLen = pStrLen();
+        }
+
+        static public MqlString FromPtr(IntPtr ptr)
+        {
+            MqlString tmp_str = new MqlString();
+            tmp_str.mStringBytes = (sbyte*)ptr;
+            tmp_str.pStrLen();
+
+            return tmp_str;
+        }
+
+        static public MqlString FromString(string str)
+        {
+            MqlString tmp_str = new MqlString();
+
+            
+
+            return tmp_str;
+        }
+
+        public sbyte this[UInt64 idx]
+        {
+            get
+            {
+                if (idx >= this.mStringLen)
+                {
+                    return -1;
+                }
+
+                return this.mStringBytes[idx];
+            }
+        }
+
+        public override string ToString()
+        {
+            return new string(mStringBytes);
+        }
+
+        private UInt64 pStrLen()
+        {
+            UInt64 count = 0;
+            for (int i = 0; ; i++)
+            {
+                sbyte b = *(mStringBytes + i);
+                if (*(mStringBytes + i) == 0)
+                {
+                    return count;
+                }
+
+                ++count;
+            }
+
+            return 0;
+        }*/
+
+        static public string FromBytePtr(IntPtr ptr)
+        {
+            return new string((sbyte*)ptr);
+        }
+
+        static public string FromWCharPtr(IntPtr ptr)
+        {
+            return new string((char*)ptr);
+        }
+
+        static public sbyte* ToCStr(string str)
+        {
+            sbyte* ptr = (sbyte*)Marshal.AllocHGlobal(Marshal.SizeOf<sbyte>()*(str.Length + 1));
+
+            for(int i = 0; i < str.Length; ++i)
+                {
+                ptr[i] = (sbyte)str[i];
+                }
+
+            ptr[str.Length] = 0;
+
+            return ptr;
+        }
+
+        static public void Release(void* ptr)
+        {
+            Marshal.FreeHGlobal((IntPtr)ptr);
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlObject
     {
-
+        [MarshalAs(UnmanagedType.SysUInt)]
         public IntPtr obj;
-        public ulong size;
-        public IntPtr start;
-        public ulong total_bytes;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public long size;
     };
 
     public enum ENUM_TIMEFRAMES
@@ -293,7 +401,10 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlVersionInfo
     {
+        [MarshalAs(UnmanagedType.I8)]
         Int64 version;
+
+        [MarshalAs(UnmanagedType.I8)]
         Int64 build;
         string date;
 
@@ -306,43 +417,110 @@ namespace Metatrader5
         };
     };
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct MqlAccountInfo
     {
-        ulong login;
-        ENUM_ACCOUNT_TRADE_MODE trade_mode;
-        Int64 leverage;
-        int limit_orders;
-        ENUM_ACCOUNT_STOPOUT_MODE margin_so_mode;
-        bool trade_allowed;
-        bool trade_expert;
-        ENUM_ACCOUNT_MARGIN_MODE margin_mode;
-        int currency_digits;
-        bool fifo_close;
-        double balance;
-        double credit;
-        double profit;
-        double equity;
-        double margin;
-        double margin_free;
-        double margin_level;
-        double margin_so_call;
-        double margin_so_so;
-        double margin_initial;
-        double margin_maintenance;
-        double assets;
-        double liabilities;
-        double commission_blocked;
-        string name;
-        string server;
-        string currency;
-        string company;
-    };
+        [MarshalAs(UnmanagedType.U8)]
+        public ulong login;
 
+        [MarshalAs(UnmanagedType.I4)]
+        public int trade_mode;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 leverage;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int limit_orders;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int margin_so_mode;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool trade_allowed;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool trade_expert;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int margin_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int currency_digits;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool fifo_close;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double balance;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double credit;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double profit;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double equity;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_free;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_level;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_so_call;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_so_so;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_initial;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_maintenance;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double assets;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double liabilities;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double commission_blocked;
+
+        [MarshalAs(UnmanagedType.SysUInt)] // pointers are platform dependent, thus SysUInt
+        public IntPtr name;
+
+        [MarshalAs(UnmanagedType.SysUInt)] // pointers are platform dependent, thus SysUInt
+        public IntPtr server;
+
+        [MarshalAs(UnmanagedType.SysUInt)] // pointers are platform dependent, thus SysUInt
+        public IntPtr currency;
+
+        [MarshalAs(UnmanagedType.SysUInt)] // pointers are platform dependent, thus SysUInt
+        public IntPtr company;
+
+        public override string ToString()
+        {
+            return "[login: " + login + ", trade_mode: " + trade_mode + ", leverage: " + leverage + ", limit: " + limit_orders + ", margin_so_mode: " + margin_so_mode
+                + ", trade_allowed: " + trade_allowed + ", trade_expert: " + trade_expert + ", margin_mode: " + margin_mode + ", currency_digits: " + currency_digits
+                + ", fifo_close: " + fifo_close + ", balance: " + balance + ", credit: " + credit + ", profit: " + profit + ", equity: " + equity + ", margin: " + margin
+                + ", margin_free: " + margin_free + ", margin_level: " + margin_level + ", margin_so_call: " + margin_so_call + ", margin_so_so: " + margin_so_so
+                + ", margin_initial: " + margin_initial + ", margin_maintenance: " + margin_maintenance + ", assets: " + assets + ", liabilities: " + liabilities
+                + ", comission_blocked: " + commission_blocked + ", + name: " + name + ", server: " + server + ", currency: " + currency + ", company: " + company + "]";
+        }
+    }
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlErrorInfo
     {
+        [MarshalAs(UnmanagedType.I4)]
         ENUM_ERROR_CODE error;
+
+        [MarshalAs(UnmanagedType.LPStr)]
         string desc;
 
         public enum ENUM_INDEX
@@ -353,320 +531,335 @@ namespace Metatrader5
         };
     };
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct MqlSymbolInfo
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    unsafe public struct MqlSymbolInfo
     {
-        public MqlSymbolInfo()
+        [MarshalAs(UnmanagedType.I1)]
+        public bool custom;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_CHART_MODE chart_mode;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool select;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool visible;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 session_deals;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 session_buy_orders;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 session_sell_orders;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 volume;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 volumehigh;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 volumelow;
+
+        [MarshalAs(UnmanagedType.I8)]
+        public Int64 time;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int digits;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int spread;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool spread_float;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int ticks_bookdepth;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_CALC_MODE trade_calc_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_TRADE_MODE trade_mode;
+
+        [MarshalAs(UnmanagedType.U8)]
+        public datetime start_time;
+
+        [MarshalAs(UnmanagedType.U8)]
+        public datetime expiration_time;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int trade_stops_level;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int trade_freeze_level;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_TRADE_EXECUTION trade_exemode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_SWAP_MODE swap_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_DAY_OF_WEEK swap_rollover3days;
+
+        [MarshalAs(UnmanagedType.I1)]
+        public bool margin_hedged_use_leg;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int expiration_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int filling_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public int order_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_ORDER_GTC_MODE order_gtc_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_OPTION_MODE option_mode;
+
+        [MarshalAs(UnmanagedType.I4)]
+        public ENUM_SYMBOL_OPTION_RIGHT option_right;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double bid;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double bidhigh;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double bidlow;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double ask;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double askhigh;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double asklow;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double last;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double lasthigh;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double lastlow;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volume_real;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volumehigh_real;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volumelow_real;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double option_strike;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double point;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_tick_value;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_tick_value_profit;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_tick_value_loss;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_tick_size;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_contract_size;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_accrued_interest;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_face_value;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double trade_liquidity_rate;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volume_min;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volume_max;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volume_step;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double volume_limit;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double swap_long;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double swap_short;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_initial;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_maintenance;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_volume;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_turnover;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_interest;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_buy_orders_volume;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_sell_orders_volume;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_open;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_close;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_aw;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_price_settlement;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_price_limit_min;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double session_price_limit_max;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double margin_hedged;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_change;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_volatility;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_theoretical;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_delta;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_theta;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_gamma;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_vega;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_rho;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_greeks_omega;
+
+        [MarshalAs(UnmanagedType.R8)]
+        public double price_sensitivity;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr basis;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr category;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr currency_base;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr currency_profit;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr currency_margin;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr bank;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr description;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr exchange;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr formula;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr isin;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr name;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr page;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr path;
+    };
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    unsafe public struct MqlSymbolInfoContainer
+    {
+        public MqlSymbolInfo this[Int64 idx]
         {
-            custom = false;
-            chart_mode = ENUM_SYMBOL_CHART_MODE.SYMBOL_CHART_MODE_LAST;
-            select = false;
-            visible = false;
-            session_deals = 0;
-            session_buy_orders = 0;
-            session_sell_orders = 0;
-            volume = 0;
-            volumehigh = 0;
-            volumelow = 0;
-            time = 0;
-            digits = 0;
-            spread = 0;
-            spread_float = false;
-            ticks_bookdepth = 0;
-            trade_calc_mode = ENUM_SYMBOL_CALC_MODE.SYMBOL_CALC_MODE_CFD;
-            trade_mode = ENUM_SYMBOL_TRADE_MODE.SYMBOL_TRADE_MODE_DISABLED;
-            start_time = 0;
-            expiration_time = 0;
-            trade_stops_level = 0;
-            trade_freeze_level = 0;
-            trade_exemode = ENUM_SYMBOL_TRADE_EXECUTION.SYMBOL_TRADE_EXECUTION_EXCHANGE;
-            swap_mode = ENUM_SYMBOL_SWAP_MODE.SYMBOL_SWAP_MODE_DISABLED;
-            swap_rollover3days = ENUM_DAY_OF_WEEK.SUNDAY;
-            margin_hedged_use_leg = false;
-            expiration_mode = 0;
-            filling_mode = 0;
-            order_mode = 0;
-            order_gtc_mode = 0;
-            option_mode = 0;
-            option_right = 0;
-            bid = 0;
-            bidhigh = 0;
-            bidlow = 0;
-            ask = 0;
-            askhigh = 0;
-            asklow = 0;
-            last = 0;
-            lasthigh = 0;
-            lastlow = 0;
-            volume_real = 0;
-            volumehigh_real = 0;
-            volumelow_real = 0;
-            option_strike = 0;
-            point = 0;
-            trade_tick_value = 0;
-            trade_tick_value_profit = 0;
-            trade_tick_value_loss = 0;
-            trade_tick_size = 0;
-            trade_contract_size = 0;
-            trade_accrued_interest = 0;
-            trade_face_value = 0;
-            trade_liquidity_rate = 0;
-            volume_min = 0;
-            volume_max = 0;
-            volume_step = 0;
-            volume_limit = 0;
-            swap_long = 0;
-            swap_short = 0;
-            margin_initial = 0;
-            margin_maintenance = 0;
-
-            session_volume = 0;
-            session_turnover = 0;
-            session_interest = 0;
-            session_buy_orders_volume = 0;
-            session_sell_orders_volume = 0;
-            session_open = 0;
-            session_close = 0;
-            session_aw = 0;
-            session_price_settlement = 0;
-            session_price_limit_min = 0;
-            session_price_limit_max = 0;
-
-            margin_hedged = 0;
-            price_change = 0;
-            price_volatility = 0;
-            price_theoretical = 0;
-            price_greeks_delta = 0;
-            price_greeks_theta = 0;
-            price_greeks_gamma = 0;
-            price_greeks_vega = 0;
-            price_greeks_rho = 0;
-            price_greeks_omega = 0;
-            price_sensitivity = 0;
-            basis = "";
-            category = "";
-            currency_base = "";
-            currency_profit = "";
-            currency_margin = "";
-            bank = "";
-            description = "";
-            exchange = "";
-            formula = "";
-            isin = "";
-            name = "";
-            page = "";
-            path = "";
+            get => mql_symbols[idx];
         }
 
-        public bool custom;
-        public ENUM_SYMBOL_CHART_MODE chart_mode;
-        public bool select;
-        public bool visible;
-        public Int64 session_deals;
-        public Int64 session_buy_orders;
-        public Int64 session_sell_orders;
-        public Int64 volume;
-        public Int64 volumehigh;
-        public Int64 volumelow;
-        public Int64 time;
-        public int digits;
-        public int spread;
-        public bool spread_float;
-        public int ticks_bookdepth;
-        public ENUM_SYMBOL_CALC_MODE trade_calc_mode;
-        public ENUM_SYMBOL_TRADE_MODE trade_mode;
-        public datetime start_time;
-        public datetime expiration_time;
-        public int trade_stops_level;
-        public int trade_freeze_level;
-        public ENUM_SYMBOL_TRADE_EXECUTION trade_exemode;
-        public ENUM_SYMBOL_SWAP_MODE swap_mode;
-        public ENUM_DAY_OF_WEEK swap_rollover3days;
-        public bool margin_hedged_use_leg;
-        public int expiration_mode;
-        public int filling_mode;
-        public int order_mode;
-        public ENUM_SYMBOL_ORDER_GTC_MODE order_gtc_mode;
-        public ENUM_SYMBOL_OPTION_MODE option_mode;
-        public ENUM_SYMBOL_OPTION_RIGHT option_right;
-        public double bid;
-        public double bidhigh;
-        public double bidlow;
-        public double ask;
-        public double askhigh;
-        public double asklow;
-        public double last;
-        public double lasthigh;
-        public double lastlow;
-        public double volume_real;
-        public double volumehigh_real;
-        public double volumelow_real;
-        public double option_strike;
-        public double point;
-        public double trade_tick_value;
-        public double trade_tick_value_profit;
-        public double trade_tick_value_loss;
-        public double trade_tick_size;
-        public double trade_contract_size;
-        public double trade_accrued_interest;
-        public double trade_face_value;
-        public double trade_liquidity_rate;
-        public double volume_min;
-        public double volume_max;
-        public double volume_step;
-        public double volume_limit;
-        public double swap_long;
-        public double swap_short;
-        public double margin_initial;
-        public double margin_maintenance;
-        public double session_volume;
-        public double session_turnover;
-        public double session_interest;
-        public double session_buy_orders_volume;
-        public double session_sell_orders_volume;
-        public double session_open;
-        public double session_close;
-        public double session_aw;
-        public double session_price_settlement;
-        public double session_price_limit_min;
-        public double session_price_limit_max;
-        public double margin_hedged;
-        public double price_change;
-        public double price_volatility;
-        public double price_theoretical;
-        public double price_greeks_delta;
-        public double price_greeks_theta;
-        public double price_greeks_gamma;
-        public double price_greeks_vega;
-        public double price_greeks_rho;
-        public double price_greeks_omega;
-        public double price_sensitivity;
-        public string basis;
-        public string category;
-        public string currency_base;
-        public string currency_profit;
-        public string currency_margin;
-        public string bank;
-        public string description;
-        public string exchange;
-        public string formula;
-        public string isin;
-        public string name;
-        public string page;
-        public string path;
-
-        public enum ENUM_INDEX
-
-        {
-            INDEX_CUSTOM,
-            INDEX_CHART_MODE,
-            INDEX_SELECT,
-            INDEX_VISIBLE,
-            INDEX_SESSION_DEALS,
-            INDEX_SESSION_BUY_ORDERS,
-            INDEX_SESSION_SELL_ORDERS,
-            INDEX_VOLUME,
-            INDEX_VOLUMEHIGH,
-            INDEX_VOLUMELOW,
-            INDEX_TIME,
-            INDEX_DIGITS,
-            INDEX_SPREAD,
-            INDEX_SPREAD_FLOAT,
-            INDEX_TICKS_BOOKDEPTH,
-            INDEX_TRADE_CALC_MODE,
-            INDEX_TRADE_MODE,
-            INDEX_START_TIME,
-            INDEX_EXPIRATION_TIME,
-            INDEX_TRADE_STOPS_LEVEL,
-            INDEX_TRADE_FREEZE_LEVEL,
-            INDEX_TRADE_EXEMODE,
-            INDEX_SWAP_MODE,
-            INDEX_SWAP_ROLLOVER3DAYS,
-            INDEX_MARGIN_HEDGED_USE_LEG,
-            INDEX_EXPIRATION_MODE,
-            INDEX_FILLING_MODE,
-            INDEX_ORDER_MODE,
-            INDEX_ORDER_GTC_MODE,
-            INDEX_OPTION_MODE,
-            INDEX_OPTION_RIGHT,
-            INDEX_BID,
-            INDEX_BIDHIGH,
-            INDEX_BIDLOW,
-            INDEX_ASK,
-            INDEX_ASKHIGH,
-            INDEX_ASKLOW,
-            INDEX_LAST,
-            INDEX_LASTHIGH,
-            INDEX_LASTLOW,
-            INDEX_VOLUME_REAL,
-            INDEX_VOLUMEHIGH_REAL,
-            INDEX_VOLUMELOW_REAL,
-            INDEX_OPTION_STRIKE,
-            INDEX_POINT,
-            INDEX_TRADE_TICK_VALUE,
-            INDEX_TRADE_TICK_VALUE_PROFIT,
-            INDEX_TRADE_TICK_VALUE_LOSS,
-            INDEX_TRADE_TICK_SIZE,
-            INDEX_TRADE_CONTRACT_SIZE,
-            INDEX_ACCRUED_INTEREST,
-            INDEX_FACE_VALUE,
-            INDEX_LIQUIDITY_RATE,
-            INDEX_VOLUME_MIN,
-            INDEX_VOLUME_MAX,
-            INDEX_VOLUME_STEP,
-            INDEX_VOLUME_LIMIT,
-            INDEX_SWAP_LONG,
-            INDEX_SWAP_SHORT,
-            INDEX_MARGIN_INITIAL,
-            INDEX_MARGIN_MAINTENANCE,
-            INDEX_SESSION_VOLUME,
-            INDEX_SESSION_TURNOVER,
-            INDEX_SESSION_INTEREST,
-            INDEX_SESSION_BUY_ORDERS_VOLUME,
-            INDEX_SESSION_SELL_ORDERS_VOLUME,
-            INDEX_SESSION_OPEN,
-            INDEX_SESSION_CLOSE,
-            INDEX_SESSION_AW,
-            INDEX_SESSION_PRICE_SETTLEMENT,
-            INDEX_SESSION_PRICE_LIMIT_MIN,
-            INDEX_SESSION_PRICE_LIMIT_MAX,
-            INDEX_MARGIN_HEDGED,
-            INDEX_PRICE_CHANGE,
-            INDEX_PRICE_VOLATILITY,
-            INDEX_PRICE_THEORETICAL,
-            INDEX_PRICE_GREEKS_DELTA,
-            INDEX_PRICE_GREEKS_THETA,
-            INDEX_PRICE_GREEKS_GAMMA,
-            INDEX_PRICE_GREEKS_VEGA,
-            INDEX_PRICE_GREEKS_RHO,
-            INDEX_PRICE_GREEKS_OMEGA,
-            INDEX_PRICE_SENSITIVITY,
-            INDEX_BASIS,
-            INDEX_CATEGORY,
-            INDEX_CURRENCY_BASE,
-            INDEX_CURRENCY_PROFIT,
-            INDEX_CURRENCY_MARGIN,
-            INDEX_BANK,
-            INDEX_DESCRIPTION,
-            INDEX_EXCHANGE,
-            INDEX_FORMULA,
-            INDEX_ISIN,
-            INDEX_NAME,
-            INDEX_PAGE,
-            INDEX_PATH,
-        };
+        private MqlSymbolInfo* mql_symbols;
+        [MarshalAs(UnmanagedType.I8)] private Int64 elem_count;
     };
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlTick
     {
+        [MarshalAs(UnmanagedType.U8)]
         public datetime time;          // Time of the last prices update
+
+        [MarshalAs(UnmanagedType.R8)]
         public double bid;           // Current Bid price
+
+        [MarshalAs(UnmanagedType.R8)]
         public double ask;           // Current Ask price
+
+        [MarshalAs(UnmanagedType.R8)]
         public double last;          // Price of the last deal (Last)
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong volume;        // Volume for the current Last price
+
+        [MarshalAs(UnmanagedType.I8)]
         public Int64 time_msc;      // Time of a price last update in milliseconds
+
+        [MarshalAs(UnmanagedType.U4)]
         public uint flags;         // Tick flags
+
+        [MarshalAs(UnmanagedType.R8)]
         public double volume_real;   // Volume for the current Last price with greater accuracy
 
         public enum ENUM_INDEX
@@ -688,37 +881,44 @@ namespace Metatrader5
     {
         unsafe public MqlTick* mql_ticks;
         private MqlObject mql_object;
+
         unsafe public MqlTick this[Int64 idx]
         {
             get => mql_ticks[idx];
-            set => mql_ticks[idx] = value;
         }
 
+        public long Size()
+        {
+            return mql_object.size;
+        }
 
     };
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlRates
     {
-        public MqlRates()
-        {
-            time = 0;
-            open = 0;
-            high = 0;
-            low = 0;
-            close = 0;
-            tick_volume = 0;
-            spread = 0;
-            real_volume = 0;
-        }
+        [MarshalAs(UnmanagedType.U8)]
+        public datetime time;         // Period start time
 
-        public datetime time;         // Period start time 
+        [MarshalAs(UnmanagedType.R8)]
         public double open;         // Open price 
+
+        [MarshalAs(UnmanagedType.R8)]
         public double high;         // The highest price of the period 
+
+        [MarshalAs(UnmanagedType.R8)]
         public double low;          // The lowest price of the period 
+
+        [MarshalAs(UnmanagedType.R8)]
         public double close;        // Close price 
+
+        [MarshalAs(UnmanagedType.I8)]
         public Int64 tick_volume;  // Tick volume 
+
+        [MarshalAs(UnmanagedType.I4)]
         public int spread;       // Spread 
+
+        [MarshalAs(UnmanagedType.I8)]
         public Int64 real_volume;  // Trade volume 
 
         public enum ENUM_INDEX
@@ -740,10 +940,10 @@ namespace Metatrader5
     {
         unsafe public MqlRates* mql_rates;
         protected MqlObject mql_object;
+
         unsafe public MqlRates this[Int64 idx]
         {
             get => mql_rates[idx];
-            set => mql_rates[idx] = value;
         }
 
 
@@ -752,22 +952,55 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlTradeRequest
     {
+        [MarshalAs(UnmanagedType.I4)]
         public ENUM_TRADE_REQUEST_ACTION action;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong magic;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong order;
-        public string symbol;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr symbol;
+
+        [MarshalAs(UnmanagedType.R8)]
         public double volume;
+
+        [MarshalAs(UnmanagedType.R8)]
         public double price;
+
+        [MarshalAs(UnmanagedType.R8)]
         public double stoplimit;
+
+        [MarshalAs(UnmanagedType.R8)]
         public double sl;
+
+        [MarshalAs(UnmanagedType.R8)]
         public double tp;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong deviation;
+
+        [MarshalAs(UnmanagedType.I4)]
         public ENUM_ORDER_TYPE type;
+
+        [MarshalAs(UnmanagedType.I4)]
         public ENUM_ORDER_TYPE_FILLING type_filling;
+
+        [MarshalAs(UnmanagedType.I4)]
         public ENUM_ORDER_TYPE_TIME type_time;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong expiration;
-        public string comment;
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr comment;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong position;
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong position_by;
 
         public enum ENUM_INDEX
@@ -796,16 +1029,37 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct MqlTradeResult
     {
+        [MarshalAs(UnmanagedType.U4)]
         public uint retcode;          // Operation return code
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong deal;             // Deal ticket, if it is performed
+
+        [MarshalAs(UnmanagedType.U8)]
         public ulong order;            // Order ticket, if it is placed
+
+        [MarshalAs(UnmanagedType.R8)]
         public double volume;           // Deal volume, confirmed by broker
+
+        [MarshalAs(UnmanagedType.R8)]
         public double price;            // Deal price, confirmed by broker
+
+        [MarshalAs(UnmanagedType.R8)]
         public double bid;              // Current Bid price
+
+        [MarshalAs(UnmanagedType.R8)]
         public double ask;              // Current Ask price
-        public string comment;          // Broker comment to operation (by default it is filled by description of trade server return code)
+
+        [MarshalAs(UnmanagedType.SysUInt)]
+        public IntPtr comment;          // Broker comment to operation (by default it is filled by description of trade server return code)
+
+        [MarshalAs(UnmanagedType.U4)]
         public uint request_id;       // Request ID set by the terminal during the dispatch 
+
+        [MarshalAs(UnmanagedType.I4)]
         public int retcode_external; // Return code of an external trading system
+
+
 
         public enum ENUM_INDEX
 
@@ -826,9 +1080,16 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     struct MqlBookInfo
     {
+        [MarshalAs(UnmanagedType.I4)]
         ENUM_BOOK_TYPE type;            // Order type from ENUM_BOOK_TYPE enumeration
+
+        [MarshalAs(UnmanagedType.R8)]
         double price;           // Price
+
+        [MarshalAs(UnmanagedType.I8)]
         Int64 volume;          // Volume
+
+        [MarshalAs(UnmanagedType.R8)]
         double volume_real;     // Volume with greater accuracy
 
         public enum ENUM_INDEX
@@ -844,32 +1105,80 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     struct MqlOrderInfo
     {
+        [MarshalAs(UnmanagedType.U8)]
         ulong ticket;
-        ulong time_setup;
-        ulong time_setup_msc;
-        ulong time_done;
-        ulong time_done_msc;
-        ulong time_expiration;
-        ENUM_ORDER_TYPE type;
-        ENUM_ORDER_TYPE_TIME type_time;
-        ENUM_ORDER_TYPE_FILLING type_filling;
-        ENUM_ORDER_STATE state;
-        ulong magic;
-        ulong position_id;
-        ulong position_by_id;
-        ENUM_ORDER_REASON reason;
-        double volume_initial;
-        double volume_current;
-        double price_open;
-        double sl;
-        double tp;
-        double price_current;
-        double price_stoplimit;
-        string symbol;
-        string comment;
-        string external_id;
-        public enum ENUM_INDEX
 
+        [MarshalAs(UnmanagedType.U8)]
+        ulong time_setup;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong time_setup_msc;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong time_done;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong time_done_msc;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong time_expiration;
+
+        [MarshalAs(UnmanagedType.I4)]
+        ENUM_ORDER_TYPE type;
+
+        [MarshalAs(UnmanagedType.I4)]
+        ENUM_ORDER_TYPE_TIME type_time;
+
+        [MarshalAs(UnmanagedType.I4)]
+        ENUM_ORDER_TYPE_FILLING type_filling;
+
+        [MarshalAs(UnmanagedType.I4)]
+        ENUM_ORDER_STATE state;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong magic;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong position_id;
+
+        [MarshalAs(UnmanagedType.U8)]
+        ulong position_by_id;
+
+        [MarshalAs(UnmanagedType.I4)]
+        ENUM_ORDER_REASON reason;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double volume_initial;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double volume_current;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double price_open;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double sl;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double tp;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double price_current;
+
+        [MarshalAs(UnmanagedType.R8)]
+        double price_stoplimit;
+
+        [MarshalAs(UnmanagedType.LPStr)]
+        string symbol;
+
+        [MarshalAs(UnmanagedType.LPStr)]
+        string comment;
+
+        [MarshalAs(UnmanagedType.LPStr)]
+        string external_id;
+
+
+        public enum ENUM_INDEX
         {
             INDEX_TICKET,
             INDEX_TIME_SETUP,
@@ -901,25 +1210,64 @@ namespace Metatrader5
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     struct MqlPositionInfo
     {
+        [MarshalAs(UnmanagedType.U8)]
         ulong ticket;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong time;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong time_msc;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong time_update;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong time_update_msc;
+
+        [MarshalAs(UnmanagedType.I4)]
         ENUM_POSITION_TYPE type;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong magic;
+
+        [MarshalAs(UnmanagedType.U8)]
         ulong identifier;
+
+        [MarshalAs(UnmanagedType.I4)]
         ENUM_POSITION_REASON reason;
+
+        [MarshalAs(UnmanagedType.R8)]
         double volume;
+
+        [MarshalAs(UnmanagedType.R8)]
         double price_open;
+
+        [MarshalAs(UnmanagedType.R8)]
         double sl;
+
+        [MarshalAs(UnmanagedType.R8)]
         double tp;
+
+        [MarshalAs(UnmanagedType.R8)]
         double price_current;
+
+        [MarshalAs(UnmanagedType.R8)]
         double swap;
+
+        [MarshalAs(UnmanagedType.R8)]
         double profit;
+
+        [MarshalAs(UnmanagedType.LPStr)]
         string symbol;
+
+        [MarshalAs(UnmanagedType.LPStr)]
         string comment;
+
+        [MarshalAs(UnmanagedType.LPStr)]
         string external_id;
+
+
 
         public enum ENUM_INDEX
         {
@@ -944,61 +1292,72 @@ namespace Metatrader5
             INDEX_EXTERNAL_ID
         }
     };
-    //}
 
     public partial class Methods
     {
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?InitPyEnv@Metatrader5@MQL5@@SA_NXZ")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?InitPyEnv@Metatrader5@MQL5@@SA_NXZ")]
         public static extern bool InitPyEnv();
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Init@Metatrader5@MQL5@@SA_NXZ")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Init@Metatrader5@MQL5@@SA_NXZ")]
         public static extern bool Init();
 
-        [DllImport(@"path/to/dll/MQL++.dll", CharSet = CharSet.Ansi, EntryPoint = "?Login@Metatrader5@MQL5@@SA_N_KPEBD10@Z")]
-        public static extern bool Login(UInt64 login, string password, string server_name, UInt64 timeout=5000, bool portable=false);
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", CharSet = CharSet.Ansi, EntryPoint = "?Login@Metatrader5@MQL5@@SA_N_KPEBD10@Z")]
+        public static extern bool Login(UInt64 login, string password, string server_name, UInt64 timeout = 5000, bool portable = false);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolsTotal@Metatrader5@MQL5@@SAJXZ")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?AccountInfo@Metatrader5@MQL5@@SA_NAEAUMqlAccountInfo@2@@Z")]
+        unsafe public static extern bool AccountInfo(ref MqlAccountInfo acc_info);
+
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?SymbolsTotal@Metatrader5@MQL5@@SAJXZ")]
         public static extern long SymbolsTotal();
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolInfo@Metatrader5@MQL5@@SA_NPEBDAEAUMqlSymbolInfo@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?SymbolInfo@Metatrader5@MQL5@@SA_NPEBDAEAUMqlSymbolInfo@2@@Z")]
         public static extern bool SymbolInfo(string symbol, ref MqlSymbolInfo symbol_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?SymbolInfoTick@Metatrader5@MQL5@@SA_NPEBDAEAUMqlTick@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?SymbolInfoTick@Metatrader5@MQL5@@SA_NPEBDAEAUMqlTick@2@@Z")]
         public static extern bool SymbolInfoTick(string symbol, ref MqlTick symbol_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyTicksFrom@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
-        public static extern long CopyTicksFrom(string symbol, ulong date_from, ulong count, ENUM_TICK_FLAG flags, ref MqlTickContainer buffer);
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyTicksRange@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
-        public static extern long CopyTicksRange(string symbol, ulong date_from, ulong date_to, ENUM_TICK_FLAG flags, ref MqlRatesContainer buffer);
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", CharSet = CharSet.Ansi, EntryPoint = "?SymbolsGet@Metatrader5@MQL5@@SAJPEBDAEAUMqlSymbolInfoContainer@2@@Z")]
+        public static extern long SymbolsGet(string symbols, ref MqlSymbolInfoContainer symbol_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?CopyRatesFrom@Metatrader5@MQL5@@SAJPEBDW4ENUM_TIMEFRAMES@2@_K2AEAUMqlRatesContainer@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyTicksFrom@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
+        public static extern long CopyTicksFrom(string symbol, ulong date_from, ulong count, ENUM_TICK_FLAG flags, ref MqlTickContainer buffer);
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyTicksRange@Metatrader5@MQL5@@SAJPEBD_K1JAEAUMqlTickContainer@2@@Z")]
+        public static extern long CopyTicksRange(string symbol, ulong date_from, ulong date_to, ENUM_TICK_FLAG flags, ref MqlTickContainer buffer);
+
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?CopyRatesFrom@Metatrader5@MQL5@@SAJPEBDW4ENUM_TIMEFRAMES@2@_K2AEAUMqlRatesContainer@2@@Z")]
         public static extern long CopyRatesFrom(string symbol, ENUM_TIMEFRAMES timeframe, UInt64 date_from, ulong count, ref MqlRatesContainer buffer);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlErrorInfo@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlErrorInfo@2@@Z")]
         public static extern void Release(ref MqlErrorInfo error_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlVersionInfo@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlVersionInfo@2@@Z")]
         public static extern void Release(ref MqlVersionInfo version_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlAccountInfo@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlAccountInfo@2@@Z")]
         public static extern void Release(ref MqlAccountInfo account_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlSymbolInfo@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlSymbolInfo@2@@Z")]
         public static extern void Release(ref MqlSymbolInfo symbol_info);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTick@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTick@2@@Z")]
         public static extern void Release(ref MqlTick tick);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlRates@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlRates@2@@Z")]
         public static extern void Release(ref MqlRates tick);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTradeRequest@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTradeRequest@2@@Z")]
         public static extern void Release(ref MqlTradeRequest request);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?Release-DLL@Metatrader5@MQL5@@SAXAEAUMqlTradeResult@2@@Z")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlTradeResult@2@@Z")]
         public static extern void Release(ref MqlTradeResult result);
 
-        [DllImport(@"path/to/dll/MQL++.dll", EntryPoint = "?OrdersTotal@Metatrader5@MQL5@@SAJXZ")]
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?Release@Metatrader5@MQL5@@SAXAEAUMqlSymbolInfoContainer@2@@Z")]
+        public static extern bool Release(ref MqlSymbolInfoContainer symbols);
+
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?OrderSend@Metatrader5@MQL5@@SA_NAEBUMqlTradeRequest@2@AEAUMqlTradeResult@2@@Z")]
         public static extern bool OrderSend(ref MqlTradeRequest request, ref MqlTradeResult result);
+
+        [DllImport(@"D:\Prj\MQL++\x64\Release-DLL\MQL++.dll", EntryPoint = "?GetCurrentTime@Utils@MQL5@@YA_KD@Z")]
+        public static extern UInt64 GetCurrentTime(sbyte timezone_offset);
     }
 }
